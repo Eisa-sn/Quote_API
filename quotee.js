@@ -33,11 +33,12 @@ quoteRouter.post("/", (req, res, next) => {
     const newElement = req.query;
     if(newElement){
         quotes.push(newElement);
-        res.send(newElement);
+        res.status(201).send(newElement);
     }else {
         res.status(400).send();
     }
-})
+});
+
 
 
 
