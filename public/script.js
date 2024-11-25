@@ -18,7 +18,7 @@ const renderError = response => {
 
 const renderQuotes = (quotes = []) => {
   resetQuotes();
-  if (quotes.length > 0) {
+  if (quotes.length) {
     quotes.forEach(quote => {
       const newQuote = document.createElement('div');
       newQuote.className = 'single-quote';
@@ -27,49 +27,49 @@ const renderQuotes = (quotes = []) => {
       quoteContainer.appendChild(newQuote);
     });
   } else {
-    quoteContainer.innerHTML = '<p>Your request returned no quotes.</p>';
+    quoteContainer.innerHTML = "quotes";
   }
 }
-
-fetchAllButton.addEventListener('click', () => {
-  fetch('/api/quotes')
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      renderError(response);
+// 
+fetchAllButton.addEventListener('click', async () => {
+  try {
+    const respons = await fetch('/api/quotes')
+    if (respons.ok) {
+      const jsonRespons = await respons.json();
+      renderQuotes(jsonRespons);
     }
-  })
-  .then(response => {
-    renderQuotes(response.quotes);
-  });
+    throw new Error("Requset faild");
+  } catch (error) {
+    console.log(error);
+  }
+
 });
 
 fetchRandomButton.addEventListener('click', () => {
   fetch('/api/quotes/random')
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      renderError(response);
-    }
-  })
-  .then(response => {
-    renderQuotes([response.quote]);
-  });
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        renderError(response);
+      }
+    })
+    .then(response => {
+      renderQuotes([response.quote]);
+    });
 });
 
 fetchByAuthorButton.addEventListener('click', () => {
   const author = document.getElementById('author').value;
   fetch(`/api/quotes?person=${author}`)
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      renderError(response);
-    }
-  })
-  .then(response => {
-    renderQuotes(response.quotes);
-  });
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        renderError(response);
+      }
+    })
+    .then(response => {
+      renderQuotes(response.quotes);
+    });
 });
