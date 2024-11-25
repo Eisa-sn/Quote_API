@@ -18,7 +18,8 @@ const renderError = response => {
 
 const renderQuotes = (quotes = []) => {
   resetQuotes();
-  if (quotes.length) {
+  
+  if (quotes.length >= 0) {
     quotes.forEach(quote => {
       const newQuote = document.createElement('div');
       newQuote.className = 'single-quote';
@@ -27,15 +28,16 @@ const renderQuotes = (quotes = []) => {
       quoteContainer.appendChild(newQuote);
     });
   } else {
-    quoteContainer.innerHTML = "quotes";
+    quoteContainer.innerHTML = quotes;
   }
 }
-// 
+
 fetchAllButton.addEventListener('click', async () => {
   try {
     const respons = await fetch('/api/quotes')
     if (respons.ok) {
       const jsonRespons = await respons.json();
+      console.log(jsonRespons);
       renderQuotes(jsonRespons);
     }
     throw new Error("Requset faild");
@@ -44,8 +46,7 @@ fetchAllButton.addEventListener('click', async () => {
   }
 
 });
-
-fetchRandomButton.addEventListener('click', () => {
+/*
   fetch('/api/quotes/random')
     .then(response => {
       if (response.ok) {
@@ -57,6 +58,20 @@ fetchRandomButton.addEventListener('click', () => {
     .then(response => {
       renderQuotes([response.quote]);
     });
+    */
+fetchRandomButton.addEventListener('click', async () => {
+  try {
+    const respons = await fetch('/api/quotes/random');
+    if (respons.ok) {
+      const jsonRespons = await respons.json();
+      const arr = [];
+      arr.push(jsonRespons)
+      renderQuotes(arr);
+    }
+    throw new Error("Requset faild");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 fetchByAuthorButton.addEventListener('click', () => {
