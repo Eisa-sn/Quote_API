@@ -1,4 +1,6 @@
 const express = require('express');
+const os = require("os");
+
 
 
 const { quotes } = require('./data');
@@ -9,6 +11,8 @@ const quoteRouter = express.Router();
 
 quoteRouter.get("/random", (req, res, next) => {
     res.send(getRandomElement(quotes));
+    let sysytemUpdatime = os.sysytemUpdatime();
+    console.log(sysytemUpdatime);
 });
 
 quoteRouter.get("/", (req, res, next) => {
